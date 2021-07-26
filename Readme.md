@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Алина Топалова](https://up.htmlacademy.ru/ecmascript/15/user/1712619).
-* Наставник: `Неизвестно`.
+* Наставник: [Виктор Кан](https://htmlacademy.ru/profile/viktorkan).
 
 ---
 
