@@ -49,5 +49,6 @@ addTripEvent(tripEventsList, createTripEditTemplate());
 addTripEvent(tripEventsList, createWaypointTemplate());
 addTripEvent(tripEventsList, createWaypointTemplate());
 addTripEvent(tripEventsList, createWaypointTemplate());
+addTripEvent(tripEventsList, createWaypointTemplate());
 
 
