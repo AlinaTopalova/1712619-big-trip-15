@@ -46,7 +46,7 @@ render(headerInfoTripEl, createInfoTripTemplate(wayPoints), 'afterbegin');
 render(headerNavigationEl, createHeaderNavigationTemplate(), 'beforeend');
 render(headerFiltersEl, createFiltersTripTemplate(), 'beforeend');
 render(tripEventsEl, createSortTripTemplate(), 'beforeend');
-render(headerInfoTripEl.querySelector('.trip-info'), createTripCostTemplate(wayPoints), 'beforeend');
+render(headerInfoTripEl.querySelector('.trip-info'), createTripCostTemplate(wayPoints[0]), 'beforeend');
 render(tripEventsEl, createEventsListTemplate(), 'beforeend');
 
 const tripEventsList = tripEventsEl.querySelector('.trip-events__list');
