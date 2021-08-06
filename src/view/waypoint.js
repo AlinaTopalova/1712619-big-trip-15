@@ -1,9 +1,10 @@
+import { createElement } from '../utils.js';
 import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration';
 
 dayjs.extend(durationPlugin);
 
-export const createWaypointTemplate = (wayPoint) => {
+const createWayPointTemplate = (wayPoint) => {
   const {
     startDate,
     finishDate,
@@ -43,7 +44,8 @@ export const createWaypointTemplate = (wayPoint) => {
 
   const favoriteWayPoint = (isFavorite) ? 'event__favorite-btn--active': '';
 
-  return `<div class="event">
+  return `<li class="trip-events__item">
+  <div class="event">
       <time class="event__date" datetime="2019-03-18">${getFormatedStartDate()}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src=${icon} alt="Event type icon">
@@ -73,7 +75,30 @@ export const createWaypointTemplate = (wayPoint) => {
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
-    </div>`;
+    </div>
+    </li>`;
 };
+
+export default class WayPoint {
+  constructor(wayPoint) {
+    this._wayPoint = wayPoint;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createWayPointTemplate(this._wayPoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
 
 

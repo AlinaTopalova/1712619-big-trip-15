@@ -1,58 +1,76 @@
 import './view/editForm.js';
-import './view/cost.js';
-import './view/filters.js';
 import './view/tripInfo.js';
+import './view/costTrip.js';
+import './view/routeTrip.js';
+import './view/filters.js';
 import './view/siteNavigation.js';
-import './view/tripSort.js';
+import './view/sort.js';
 import './view/waypoint.js';
 import './view/eventsList.js';
-import './view/eventElement';
 import './mock/wayPoint-mock';
 
-import { createInfoTripTemplate } from './view/tripInfo.js';
-import { createHeaderNavigationTemplate } from './view/siteNavigation.js';
-import { createFiltersTripTemplate } from './view/filters.js';
-import { createSortTripTemplate } from './view/tripSort.js';
-import { createTripCostTemplate } from './view/cost.js';
-import { createWaypointTemplate } from './view/waypoint.js';
-import { createEventsListTemplate } from './view/eventsList.js';
-import { createTripEditTemplate } from './view/editForm.js';
-import { createEventElementTemplate } from './view/eventElement.js';
-import { generateWayPoints } from './mock/wayPoint-mock';
+import TripInfoView from './view/tripInfo.js';
+import RouteTripView from './view/routeTrip.js';
+import CostTripView from './view/costTrip.js';
+import SiteNavigationView from './view/siteNavigation.js';
+import EventsListView from './view/eventsList.js';
+import WayPointView from './view/waypoint.js';
+import FiltersTripView from './view/filters.js';
+import SortTripView from './view/sort.js';
+import TripEditView from './view/editForm.js';
 
-const WAYPOINTS_COUNT = 10;
+import { generateWayPoints } from './mock/wayPoint-mock.js';
+import { render } from './utils.js';
+import { RenderPosition } from './constants.js';
+
+const WAYPOINTS_COUNT = 15;
+const wayPoints = generateWayPoints(WAYPOINTS_COUNT).sort((a,b) => a.startDate - b.startDate);
 
 const siteHeaderEl = document.querySelector('.page-header');
 const headerInfoTripEl = siteHeaderEl.querySelector('.trip-main');
 const headerNavigationEl = siteHeaderEl.querySelector('.trip-controls__navigation');
 const headerFiltersEl = siteHeaderEl.querySelector('.trip-controls__filters');
-
 const pageMainEl = document.querySelector('.page-main');
-const bodyContainerEl = pageMainEl.querySelector('.page-body__container');
-const tripEventsEl = bodyContainerEl.querySelector('.trip-events');
+const tripEventsEl = pageMainEl.querySelector('.trip-events');
 
-const wayPoints = generateWayPoints(WAYPOINTS_COUNT);
+const tripInfoComponent = new TripInfoView();
+render(headerInfoTripEl, tripInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
+render(tripInfoComponent.getElement(), new RouteTripView(wayPoints).getElement(), RenderPosition.BEFOREEND);
+render(tripInfoComponent.getElement(), new CostTripView(wayPoints).getElement(), RenderPosition.BEFOREEND);
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-const addTripEvent = (container, tripEvent) => {
-  const template = createEventElementTemplate(tripEvent);
-  render(container, template, 'beforeend');
-};
-
-render(headerInfoTripEl, createInfoTripTemplate(wayPoints), 'afterbegin');
-render(headerNavigationEl, createHeaderNavigationTemplate(), 'beforeend');
-render(headerFiltersEl, createFiltersTripTemplate(), 'beforeend');
-render(tripEventsEl, createSortTripTemplate(), 'beforeend');
-render(headerInfoTripEl.querySelector('.trip-info'), createTripCostTemplate(wayPoints[0]), 'beforeend');
-render(tripEventsEl, createEventsListTemplate(), 'beforeend');
+render(headerNavigationEl, new SiteNavigationView().getElement(), RenderPosition.BEFOREEND);
+render(headerFiltersEl, new FiltersTripView().getElement(), RenderPosition.BEFOREEND);
+render(tripEventsEl, new SortTripView().getElement(), RenderPosition.AFTERBEGIN);
+render(tripEventsEl, new EventsListView().getElement(), RenderPosition.BEFOREEND);
 
 const tripEventsList = tripEventsEl.querySelector('.trip-events__list');
 
-addTripEvent(tripEventsList, createTripEditTemplate(wayPoints[0]));
+const renderEventTripList = (eventListElement, point) => {
+  const wayPointComponent = new WayPointView(point);
+  const wayPointEditComponent = new TripEditView(point);
+
+  const replaceWaypointToEdit = () => {
+    eventListElement.replaceChild(wayPointEditComponent.getElement(), wayPointComponent.getElement());
+  };
+
+  const replaceEditToWaypoint = () => {
+    eventListElement.replaceChild(wayPointComponent.getElement(), wayPointEditComponent.getElement());
+  };
+
+  wayPointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceWaypointToEdit();
+  });
+
+  wayPointEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceEditToWaypoint();
+  });
+
+  render(eventListElement, wayPointComponent.getElement(), RenderPosition.BEFOREEND);
+};
 
 for (let i = 0; i < WAYPOINTS_COUNT; i++) {
-  addTripEvent(tripEventsList, createWaypointTemplate(wayPoints[i]));
+  renderEventTripList(tripEventsList, wayPoints[i]);
 }
+
+
