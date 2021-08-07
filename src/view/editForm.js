@@ -1,7 +1,8 @@
+import { createElement } from '../utils.js';
 import dayjs from 'dayjs';
 import {OFFERS_OPTION, PointsType, Cities} from '../constants.js';
 
-export const createTripEditTemplate = (waypoint) => {
+const createTripEditTemplate = (waypoint) => {
   const {
     icon,
     type,
@@ -88,7 +89,8 @@ export const createTripEditTemplate = (waypoint) => {
   </div>`;
   };
 
-  return `<form class="event event--edit" action="#" method="post">
+  return `<li class="trip-events__item">
+  <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -133,5 +135,29 @@ export const createTripEditTemplate = (waypoint) => {
         </div>
       </section>
     </section>
-   </form>`;
+   </form>
+   </li>`;
 };
+
+export default class TripEdit {
+  constructor(waypoint) {
+    this._waypoint = waypoint;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripEditTemplate(this._waypoint);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

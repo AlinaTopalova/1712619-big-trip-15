@@ -1,34 +1,29 @@
-import dayjs from 'dayjs';
+import {createElement} from '../utils.js';
 
-export const createInfoTripTemplate = (wayPoints) => {
-  const startDate = wayPoints[0].startDate;
-  const finishDate = wayPoints[wayPoints.length - 1].finishDate;
-  const formatedStartDate = dayjs(startDate).format('MMM DD');
-  const formatedfinishDate = dayjs(finishDate).format('DD');
+const createTripInfoTemplate = () => (
+  `<section class="trip-main__trip-info  trip-info">
+  </section>`
+);
 
-  const cities = wayPoints.map((wayPoint) => wayPoint.city);
-  const uniqueCities = Array.from(new Set(cities));
-
-  let route = '';
-
-  if (uniqueCities.length > 3) {
-    route =
-    `
-    <h1 class="trip-info__title">${uniqueCities[0]} &mdash; ... &mdash; ${uniqueCities[uniqueCities.length - 1]}</h1>
-    `;
-  } else {
-    route =
-    `
-    <h1 class="trip-info__title">${uniqueCities[0]} &mdash; ${uniqueCities[1]} &mdash; ${uniqueCities[2]}</h1>
-    `;
+export default class TripInfo {
+  constructor() {
+    this._element = null;
   }
 
-  return `<section class="trip-main__trip-info  trip-info">
-    <div class="trip-info__main">
-    ${route}
+  getTemplate() {
+    return createTripInfoTemplate();
+  }
 
-      <p class="trip-info__dates">${formatedStartDate} &nbsp;&mdash;&nbsp;${formatedfinishDate}</p>
-    </div>
-  </section>`;
-};
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
 

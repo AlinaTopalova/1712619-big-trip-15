@@ -1,8 +1,13 @@
-const START_DATE_GAP = 159200000;
-const FINISH_DATE_GAP_FROM = 3600000;
-const FINISH_DATE_GAP_TO = 14400000;
+export const START_DATE_GAP = 159200000;
+export const FINISH_DATE_GAP_FROM = 3600000;
+export const FINISH_DATE_GAP_TO = 14400000;
 
-const PointsType = {
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+export const PointsType = {
   Taxi:'taxi',
   Bus:'bus',
   Train:'train',
@@ -14,7 +19,7 @@ const PointsType = {
   Restaurant:'restaurant',
 };
 
-const PointsIcon = {
+export const PointsIcon = {
   [PointsType.Taxi]: 'img/icons/taxi.png',
   [PointsType.Bus]: 'img/icons/bus.png',
   [PointsType.Train]: 'img/icons/train.png',
@@ -26,7 +31,7 @@ const PointsIcon = {
   [PointsType.Restaurant]: 'img/icons/restaurant.png',
 };
 
-const Cities = {
+export const Cities = {
   AMSTERDAM:'Amsterdam',
   ROTTERDAM:'Rotterdam',
   BERLIN:'Berlin',
@@ -35,7 +40,7 @@ const Cities = {
   PARIS:'Paris',
 };
 
-const DESCRIPTIONS = [
+export const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
   'Fusce tristique felis at fermentum pharetra.',
@@ -48,7 +53,7 @@ const DESCRIPTIONS = [
   'Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.',
 ];
 
-const OFFERS_OPTION = [
+export const OFFERS_OPTION = [
   {
     'type': PointsType.Taxi,
     'offers': [
@@ -161,14 +166,3 @@ const OFFERS_OPTION = [
     ],
   },
 ];
-
-export {
-  START_DATE_GAP,
-  FINISH_DATE_GAP_FROM,
-  FINISH_DATE_GAP_TO,
-  PointsType,
-  Cities,
-  DESCRIPTIONS,
-  OFFERS_OPTION,
-  PointsIcon
-};
