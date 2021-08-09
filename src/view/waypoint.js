@@ -4,7 +4,7 @@ import durationPlugin from 'dayjs/plugin/duration';
 
 dayjs.extend(durationPlugin);
 
-const createWayPointTemplate = (wayPoint) => {
+const createWaypointTemplate = (waypoint) => {
   const {
     startDate,
     finishDate,
@@ -14,7 +14,7 @@ const createWayPointTemplate = (wayPoint) => {
     offers,
     icon,
     isFavorite,
-  } = wayPoint;
+  } = waypoint;
 
   const dayjsStartDate = dayjs(startDate);
   const dayjsFinishDate = dayjs(finishDate);
@@ -42,7 +42,7 @@ const createWayPointTemplate = (wayPoint) => {
     </li>
   `).join('');
 
-  const favoriteWayPoint = (isFavorite) ? 'event__favorite-btn--active': '';
+  const favoriteWaypoint = (isFavorite) ? 'event__favorite-btn--active': '';
 
   return `<li class="trip-events__item">
   <div class="event">
@@ -66,7 +66,7 @@ const createWayPointTemplate = (wayPoint) => {
       <ul class="event__selected-offers">
         ${offerItems}
       </ul>
-      <button class="event__favorite-btn ${favoriteWayPoint}" type="button">
+      <button class="event__favorite-btn ${favoriteWaypoint}" type="button">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
           <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
@@ -79,14 +79,14 @@ const createWayPointTemplate = (wayPoint) => {
     </li>`;
 };
 
-export default class WayPoint {
-  constructor(wayPoint) {
-    this._wayPoint = wayPoint;
+export default class Waypoint {
+  constructor(waypoint) {
+    this._waypoint = waypoint;
     this._element = null;
   }
 
   getTemplate() {
-    return createWayPointTemplate(this._wayPoint);
+    return createWaypointTemplate(this._waypoint);
   }
 
   getElement() {
