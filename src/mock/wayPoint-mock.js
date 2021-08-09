@@ -16,7 +16,7 @@ const generateDate = (
   gap = getRandomNumber(-START_DATE_GAP, START_DATE_GAP),
 ) => dayjs(fromDate).add(gap, 'ms').toDate();
 
-const generateWayPoint = (id) => {
+const generateWaypoint = (id) => {
   const startDate = generateDate();
   const finishDate = generateDate(
     startDate,
@@ -38,9 +38,9 @@ const generateWayPoint = (id) => {
   };
 };
 
-const generateWayPoints = (pointsAmount) => (
+const generateWaypoints = (pointsAmount) => (
   Array.from({ length:pointsAmount })
-    .map((_, idx) => generateWayPoint(`${idx}`))
+    .map((_, idx) => generateWaypoint(`${idx}`))
 );
 
-export { generateWayPoints };
+export { generateWaypoints };

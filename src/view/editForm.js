@@ -57,7 +57,7 @@ const createTripEditTemplate = (waypoint) => {
     </section>`;
   };
 
-  const getWayPointTypes = () => (
+  const getWaypointTypes = () => (
     Object.keys(PointsType).map((pointType, idx)=> `
       <div class="event__type-item">
         <input
@@ -101,7 +101,7 @@ const createTripEditTemplate = (waypoint) => {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${getWayPointTypes()}
+            ${getWaypointTypes()}
           </fieldset>
         </div>
       </div>

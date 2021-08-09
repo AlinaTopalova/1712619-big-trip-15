@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { RenderPosition } from './constants.js';
 
 export const render = (container, element, place) => {
@@ -41,3 +42,5 @@ export const shuffleArray = (array) => {
   }
   return result;
 };
+
+export const formatedDate = (date) => dayjs(date).format('MMM DD');
