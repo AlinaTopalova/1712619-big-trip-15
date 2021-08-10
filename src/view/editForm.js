@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract';
 import dayjs from 'dayjs';
 import {OFFERS_OPTION, PointsType, Cities} from '../constants.js';
 
@@ -139,25 +139,36 @@ const createTripEditTemplate = (waypoint) => {
    </li>`;
 };
 
-export default class TripEdit {
+export default class TripEdit extends AbstractView {
   constructor(waypoint) {
+    super();
     this._waypoint = waypoint;
-    this._element = null;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formCancelHandler = this._formCancelHandler.bind(this);
   }
 
   getTemplate() {
     return createTripEditTemplate(this._waypoint);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  _formCancelHandler(evt) {
+    if (evt.target.classList.contains('event__reset-btn')){
+      this._callback.formCancel();
+    }
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  setFormCancelHandler(callback) {
+    this._callback.formCancel = callback;
+    this.getElement().querySelector('form').addEventListener('click', this._formCancelHandler);
   }
 }
