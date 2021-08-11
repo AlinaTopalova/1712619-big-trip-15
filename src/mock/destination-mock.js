@@ -1,4 +1,4 @@
-import {getRandomNumber,shuffleArray} from '../utils.js';
+import {getRandomNumber,shuffleArray} from '../utils/common.js';
 import {DESCRIPTIONS} from '../constants.js';
 
 const generatePhotos = () => {

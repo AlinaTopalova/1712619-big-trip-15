@@ -1,6 +1,7 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract';
 import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration';
+import {formatedDate, DATE_FORMAT} from '../utils/date.js';
 
 dayjs.extend(durationPlugin);
 
@@ -20,9 +21,9 @@ const createWaypointTemplate = (waypoint) => {
   const dayjsFinishDate = dayjs(finishDate);
   const dayjsDuration = dayjs.duration(dayjsFinishDate.diff(dayjsStartDate));
 
-  const getFormatedStartDate = () => dayjsStartDate.format('MMM D');
-  const getFormatedStartTime = () => dayjsStartDate.format('HH:mm');
-  const getFormatedFinishTime = () => dayjsFinishDate.format('HH:mm');
+  const getFormatedStartDate = () => formatedDate(startDate, DATE_FORMAT.DAYMONTH);
+  const getFormatedStartTime = () => formatedDate(startDate, DATE_FORMAT.TIME);
+  const getFormatedFinishTime = () => formatedDate(finishDate, DATE_FORMAT.TIME);
   const getFormatedDuration = () => {
     let formatTemplate = 'mm[M]';
     if (dayjsDuration.hours()) {
@@ -79,26 +80,24 @@ const createWaypointTemplate = (waypoint) => {
     </li>`;
 };
 
-export default class Waypoint {
+export default class Waypoint extends AbstractView {
   constructor(waypoint) {
+    super();
     this._waypoint = waypoint;
-    this._element = null;
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return createWaypointTemplate(this._waypoint);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }
-
-

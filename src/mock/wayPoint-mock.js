@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {generateDestination} from '../mock/destination-mock.js';
 import {generateOffers} from '../mock/offers-mock.js';
-import {getRandomNumber,getArrayRandElement} from '../utils.js';
+import {getRandomNumber,getArrayRandElement} from '../utils/common.js';
 import {
   START_DATE_GAP,
   FINISH_DATE_GAP_FROM,

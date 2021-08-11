@@ -1,10 +1,9 @@
-import dayjs from 'dayjs';
-import { createElement, formatedDate } from '../utils.js';
+import AbstractView from './abstract';
+import { formatedDate, DATE_FORMAT } from '../utils/date.js';
 
 const createRouteTripTemplate = (waypoints) => {
   const startDate = waypoints[0].startDate;
   const finishDate = waypoints[waypoints.length - 1].finishDate;
-  const formatedfinishDay = dayjs(finishDate).format('DD');
 
   const cities = waypoints.map((waypoint) => waypoint.city);
   const uniqueCities = Array.from(new Set(cities));
@@ -17,31 +16,20 @@ const createRouteTripTemplate = (waypoints) => {
   </h1>
   <p class="trip-info__dates">
   ${(startDate.getMonth() === finishDate.getMonth()) ?
-    `${formatedDate(startDate)}&nbsp;&mdash;&nbsp;${formatedfinishDay}`:
-    `${formatedDate(startDate)}&nbsp;&mdash;&nbsp;${formatedDate(finishDate)}`}
+    `${formatedDate(startDate, DATE_FORMAT.DAYMONTH)}&nbsp;&mdash;&nbsp;${formatedDate(finishDate, DATE_FORMAT.DAY)}`:
+    `${formatedDate(startDate, DATE_FORMAT.DAYMONTH)}&nbsp;&mdash;&nbsp;${formatedDate(finishDate, DATE_FORMAT.DAYMONTH)}`}
   </p>
   </div>`;
 };
 
-export default class RouteTrip {
+export default class RouteTrip extends AbstractView {
   constructor(waypoints) {
+    super();
     this._waypoints = waypoints;
-    this._element = null;
   }
 
   getTemplate() {
     return createRouteTripTemplate(this._waypoints);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
