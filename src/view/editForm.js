@@ -153,13 +153,12 @@ export default class TripEdit extends AbstractView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._waypoint);
   }
 
   _formCancelHandler(evt) {
-    if (evt.target.classList.contains('event__reset-btn')){
-      this._callback.formCancel();
-    }
+    evt.preventDefault();
+    this._callback.formCancel();
   }
 
   setFormSubmitHandler(callback) {
@@ -169,6 +168,6 @@ export default class TripEdit extends AbstractView {
 
   setFormCancelHandler(callback) {
     this._callback.formCancel = callback;
-    this.getElement().querySelector('form').addEventListener('click', this._formCancelHandler);
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formCancelHandler);
   }
 }
