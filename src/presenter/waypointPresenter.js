@@ -16,48 +16,53 @@ export default class Waypoint {
     this._changeMode = changeMode;
     this._mode = Mode.DEFAULT;
 
-    this._waypointComponent = null;
-    this._waypointEditComponent = null;
+    this._waypointView = null;
+    this._waypointEditView = null;
 
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleFormCancelClick = this._handleFormCancelClick.bind(this);
   }
 
   init(waypoint) {
     this._waypoint = waypoint;
 
-    const prevWaypointComponent = this._waypointComponent;
-    const prevWaypointEditComponent = this._waypointEditComponent;
+    const prevWaypointView = this._waypointView;
+    const prevWaypointEditView = this._waypointEditView;
 
-    this._waypointComponent = new WaypointView(waypoint);
-    this._waypointEditComponent = new TripEditView(waypoint);
-    this._waypointComponent.setEditClickHandler(this._handleEditClick);
-    this._waypointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._waypointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
-    this._waypointEditComponent.setFormCancelHandler(this._handleFormCancelClick);
+    this._waypointView = new WaypointView(waypoint);
+    this._waypointEditView = new TripEditView(waypoint);
+    this._waypointView.setEditClickHandler(this._handleEditClick);
+    this._waypointView.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._waypointEditView.setFormSubmitHandler(this._handleFormSubmit);
+    this._waypointEditView.setFormCancelHandler(this._handleFormCancelClick);
 
-    if (prevWaypointComponent === null || prevWaypointEditComponent === null) {
-      render(this._waypointListContainer, this._waypointComponent, RenderPosition.BEFOREEND);
+    if (prevWaypointView === null || prevWaypointEditView === null) {
+      render(
+        this._waypointListContainer,
+        this._waypointView,
+        RenderPosition.BEFOREEND,
+      );
       return;
     }
 
     if (this._mode === Mode.DEFAULT) {
-      replace(this._waypointComponent, prevWaypointComponent);
+      replace(this._waypointView, prevWaypointView);
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._waypointEditComponent, prevWaypointEditComponent);
+      replace(this._waypointEditView, prevWaypointEditView);
     }
 
-    remove(prevWaypointComponent);
-    remove(prevWaypointEditComponent);
+    remove(prevWaypointView);
+    remove(prevWaypointEditView);
   }
 
   destroy() {
-    remove(this._waypointComponent);
-    remove(this._waypointEditComponent);
+    remove(this._waypointView);
+    remove(this._waypointEditView);
   }
 
   resetView() {
@@ -67,14 +72,14 @@ export default class Waypoint {
   }
 
   _replaceWaypointToEdit() {
-    replace(this._waypointEditComponent, this._waypointComponent);
+    replace(this._waypointEditView, this._waypointView);
     document.addEventListener('keydown', this._escKeyDownHandler);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceEditToWaypoint() {
-    replace(this._waypointComponent, this._waypointEditComponent);
+    replace(this._waypointView, this._waypointEditView);
     document.removeEventListener('keydown', this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
   }
