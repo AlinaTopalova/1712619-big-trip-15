@@ -2,6 +2,12 @@ export const START_DATE_GAP = 159200000;
 export const FINISH_DATE_GAP_FROM = 3600000;
 export const FINISH_DATE_GAP_TO = 14400000;
 
+export const FiltersName = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past',
+};
+
 export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
