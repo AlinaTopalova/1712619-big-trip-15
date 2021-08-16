@@ -2,7 +2,6 @@ import EventsListView from '../view/eventsList.js';
 import SortTripView from '../view/sort.js';
 import NoWaypointView from '../view/no-waypoint.js';
 import WaypointPresenter from './waypointPresenter.js';
-import InfoPresenter from './infoPresenter.js';
 
 import { render } from '../utils/render.js';
 import { RenderPosition } from '../constants.js';
@@ -39,6 +38,12 @@ export default class Trip {
     this._waypointPresenters.set(waypoint.id, waypointPresenter);
   }
 
+  _renderWaypoints(waypoints) {
+    waypoints.forEach((waypoint) => {
+      this._renderWaypoint(waypoint);
+    });
+  }
+
   _handleWaypointChange(updatedWaypoint) {
     this._waypoints = updateItem(this._waypoints, updatedWaypoint);
     this._sourcedWaypoints = updateItem(this._sourcedWaypoints, updatedWaypoint);
@@ -69,9 +74,7 @@ export default class Trip {
     }
     this._sortWaypoints(sortType);
     this._clearTrip();
-    this._waypoints.forEach((waypoint) => {
-      this._renderWaypoint(waypoint);
-    });
+    this._renderWaypoints(this._waypoints);
   }
 
   _renderSort() {
@@ -81,11 +84,6 @@ export default class Trip {
 
   _renderNoWaypoints() {
     render(this._tripEventsContainer, this._noWaypointView, RenderPosition.AFTERBEGIN);
-  }
-
-  _renderTripInfo(waypoints) {
-    const infoPresenter = new InfoPresenter(waypoints);
-    infoPresenter.renderTripInfo();
   }
 
   _clearTrip() {
@@ -98,11 +96,8 @@ export default class Trip {
       this._renderNoWaypoints();
       return;
     }
-    this._renderTripInfo(waypoints);
     this._renderSort();
-    waypoints.forEach((waypoint) => {
-      this._renderWaypoint(waypoint);
-    });
+    this._renderWaypoints(waypoints);
   }
 }
 
