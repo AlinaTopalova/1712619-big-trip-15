@@ -13,6 +13,7 @@ import './view/no-waypoint.js';
 import SiteNavigationView from './view/siteNavigation.js';
 import FiltersTripView from './view/filters.js';
 import TripPresenter from './presenter/tripPresenter.js';
+import InfoPresenter from './presenter/infoPresenter.js';
 import { generateWaypoints } from './mock/wayPoint-mock.js';
 import { render } from './utils/render.js';
 import { RenderPosition } from './constants.js';
@@ -29,3 +30,5 @@ render(filtersEl, new FiltersTripView(), RenderPosition.BEFOREEND);
 
 const tripPresenter = new TripPresenter();
 tripPresenter.init(waypoints);
+const infoPresenter = new InfoPresenter(waypoints);
+infoPresenter.renderTripInfo();

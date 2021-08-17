@@ -6,16 +6,17 @@ import { render } from '../utils/render.js';
 import { RenderPosition } from '../constants.js';
 
 export default class Info {
-  constructor() {
+  constructor(waypoints) {
+    this._waypoints = waypoints;
     this._infoContainer = document.querySelector('.trip-main');
+    this._tripInfoView = new TripInfoView();
+    this._routeTripView = new RouteTripView(this._waypoints);
+    this._costTripView = new CostTripView(this._waypoints);
   }
 
-  renderTripInfo(waypoints) {
-    const tripInfoView = new TripInfoView();
-    const routeTripView = new RouteTripView(waypoints);
-    const costTripView = new CostTripView(waypoints);
-    render(this._infoContainer, tripInfoView, RenderPosition.AFTERBEGIN);
-    render(tripInfoView, routeTripView, RenderPosition.BEFOREEND);
-    render(tripInfoView, costTripView, RenderPosition.BEFOREEND);
+  renderTripInfo() {
+    render(this._infoContainer, this._tripInfoView, RenderPosition.AFTERBEGIN);
+    render(this._tripInfoView, this._routeTripView, RenderPosition.BEFOREEND);
+    render(this._tripInfoView, this._costTripView, RenderPosition.BEFOREEND);
   }
 }
