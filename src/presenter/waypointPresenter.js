@@ -37,7 +37,8 @@ export default class Waypoint {
     this._waypointView.setEditClickHandler(this._handleEditClick);
     this._waypointView.setFavoriteClickHandler(this._handleFavoriteClick);
     this._waypointEditView.setFormSubmitHandler(this._handleFormSubmit);
-    this._waypointEditView.setFormCancelHandler(this._handleFormCancelClick);
+    this._waypointEditView.setFormCancelClickHandler(this._handleFormCancelClick);
+    //this._waypointEditView.setFormDeleteClickHandler(this._handleEditFormDelete);
 
     if (prevWaypointView === null || prevWaypointEditView === null) {
       render(
@@ -87,6 +88,7 @@ export default class Waypoint {
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this._waypointEditView.resetView(this._waypoint);
       this._replaceEditToWaypoint();
     }
   }
@@ -96,6 +98,10 @@ export default class Waypoint {
   }
 
   _handleFormCancelClick() {
+    this._replaceEditToWaypoint();
+  }
+
+  _handleEditFormDelete() {
     this._replaceEditToWaypoint();
   }
 
