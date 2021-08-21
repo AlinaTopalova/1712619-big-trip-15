@@ -294,5 +294,31 @@ export const DESTINATIONS = [
       },
     ],
   },
+  {
+    'name': 'Geneva',
+    'description': 'Geneva. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.Sed sed nisi sed augue convallis suscipit in sed felis.Aliquam erat volutpat.',
+    'pictures': [
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva street market',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva zoo',
+      },
+    ],
+  },
 ];
 

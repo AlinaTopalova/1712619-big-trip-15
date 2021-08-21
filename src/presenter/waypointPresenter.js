@@ -24,6 +24,7 @@ export default class Waypoint {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormCancelClick = this._handleFormCancelClick.bind(this);
+    this._handleEditFormDelete = this._handleEditFormDelete.bind(this);
   }
 
   init(waypoint) {
@@ -38,7 +39,7 @@ export default class Waypoint {
     this._waypointView.setFavoriteClickHandler(this._handleFavoriteClick);
     this._waypointEditView.setFormSubmitHandler(this._handleFormSubmit);
     this._waypointEditView.setFormCancelClickHandler(this._handleFormCancelClick);
-    //this._waypointEditView.setFormDeleteClickHandler(this._handleEditFormDelete);
+    this._waypointEditView.setFormDeleteClickHandler(this._handleEditFormDelete);
 
     if (prevWaypointView === null || prevWaypointEditView === null) {
       render(
@@ -88,7 +89,7 @@ export default class Waypoint {
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      this._waypointEditView.resetView(this._waypoint);
+      this._waypointEditView.reset(this._waypoint);
       this._replaceEditToWaypoint();
     }
   }
@@ -98,11 +99,12 @@ export default class Waypoint {
   }
 
   _handleFormCancelClick() {
+    this._waypointEditView.reset(this._waypoint);
     this._replaceEditToWaypoint();
   }
 
   _handleEditFormDelete() {
-    this._replaceEditToWaypoint();
+    this._replaceEditToWaypoint(); // не реализовала удаление точки маршрута
   }
 
   _handleFavoriteClick() {

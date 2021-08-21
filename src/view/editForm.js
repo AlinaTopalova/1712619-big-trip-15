@@ -67,8 +67,9 @@ const createTripEditTemplate = (data) => {
     </section>`;
   };
 
-  const getCitiesInputs = () => {
-    const cityInput = Object.keys(Cities).map((cityName) => `<option value=${Cities[cityName]}>${Cities[cityName]}</option>`)
+  const getCitiesInputs = (cityValue) => {
+    const cityInput = Object.keys(Cities).map((cityName) => `<option value=${Cities[cityName]}
+    ${(cityValue === Cities[cityName]) ? 'selected' : ''}>${Cities[cityName]}</option>`)
       .join('');
     return `<div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
@@ -81,7 +82,7 @@ const createTripEditTemplate = (data) => {
   </div>`;
   };
 
-  const getWaypointTypes = () => (
+  const getWaypointTypes = (tripType) => (
     Object.keys(PointsType).map((pointType, idx)=> `
       <div class="event__type-item">
         <input
@@ -89,6 +90,7 @@ const createTripEditTemplate = (data) => {
           class="event__type-input  visually-hidden"
           type="radio" name="event-type"
           value=${PointsType[pointType]}
+          ${(tripType === PointsType[pointType]) ? 'checked' : ''}
 
         >
         <label
@@ -110,7 +112,7 @@ const createTripEditTemplate = (data) => {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${getWaypointTypes()}
+            ${getWaypointTypes(tripType)}
           </fieldset>
         </div>
       </div>`
@@ -120,7 +122,7 @@ const createTripEditTemplate = (data) => {
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getWaypointTypesTemplate(type)}
-      ${getCitiesInputs()}
+      ${getCitiesInputs(city)}
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
         <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatedFullDate(startDate)}">
@@ -158,7 +160,14 @@ export default class TripEdit extends SmartView {
     this._deleteClickHandler = this._deleteClickHandler.bind(this);
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
+    this._priceInputHandler  = this._priceInputHandler.bind(this);
     this._setInnerHandlers();
+  }
+
+  reset(waypoint) {
+    this.updateData(
+      TripEdit.parsePointToData(waypoint),
+    );
   }
 
   getTemplate() {
@@ -176,14 +185,25 @@ export default class TripEdit extends SmartView {
     Object.assign({}, data);
   }
 
-  _formSubmitHandler(evt) {
-    evt.preventDefault();
+  _formSubmitHandler() {
     this._callback.formSubmit(TripEdit.parseDataToPoint(this._data));
   }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  _priceInputHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value,
+    }, true);
+  }
+
+  setFormPriceInputHandler(callback) {
+    this._callback.formPriceInput = callback;
+    this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceInputHandler);
   }
 
   _formCancelHandler(evt) {
@@ -212,12 +232,14 @@ export default class TripEdit extends SmartView {
     }
     this.updateData({
       type: evt.target.value,
+      [evt.target.value]: evt.target.checked,
     });
   }
 
   _destinationChangeHandler(evt) {
     this.updateData({
       city: evt.target.value,
+      [evt.target.value]: evt.target.checked,
     });
   }
 
@@ -231,5 +253,6 @@ export default class TripEdit extends SmartView {
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFormCancelClickHandler(this._callback.formCancel);
     this.setFormDeleteClickHandler(this._callback.deleteClick);
+    this.setFormPriceInputHandler(this._callback.formPriceInput);
   }
 }
