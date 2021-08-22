@@ -1,6 +1,10 @@
 import SmartView from './smart.js';
 import dayjs from 'dayjs';
 import {OFFERS_OPTION, PointsType, Cities, DESTINATIONS} from '../constants.js';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+
 
 const createTripEditTemplate = (data) => {
   const {
@@ -155,13 +159,19 @@ export default class TripEdit extends SmartView {
   constructor(waypoint) {
     super();
     this._data = TripEdit.parsePointToData(waypoint);
+    this._datepickerStart = null;
+    this._datepickerFinish = null;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._formCancelHandler = this._formCancelHandler.bind(this);
     this._deleteClickHandler = this._deleteClickHandler.bind(this);
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
     this._priceInputHandler  = this._priceInputHandler.bind(this);
+    this._datepickerStartChangeHandler = this._datepickerStartChangeHandler.bind(this);
+    this._datepickerFinishChangeHandler = this._datepickerFinishChangeHandler.bind(this);
     this._setInnerHandlers();
+    this._setDatepickerStart();
+    this._setDatepickerFinish();
   }
 
   reset(waypoint) {
@@ -183,6 +193,53 @@ export default class TripEdit extends SmartView {
 
   static parseDataToPoint(data) {
     Object.assign({}, data);
+  }
+
+  _setDatepickerStart() {
+    if (this._datepickerStart) {
+      this._datepickerStart.destroy();
+      this._datepickerStart = null;
+    }
+    if (this._data.startDate) {
+      this._datepickerStart = flatpickr(
+        this.getElement().querySelector('#event-start-time-1'),
+        {
+          dateFormat: 'd/m/y H:i',
+          defaultDate: this._data.startDate,
+          onChange: this._datepickerStartChangeHandler,
+        },
+      );
+    }
+  }
+
+  _datepickerStartChangeHandler([userDate]) {
+    this.updateData({
+      startDate: userDate,
+    });
+  }
+
+  _setDatepickerFinish() {
+    if (this._datepickerFinish) {
+      this._datepickerFinish.destroy();
+      this._datepickerFinish = null;
+    }
+    if (this._data.finishDate) {
+      this._datepickerFinish = flatpickr(
+        this.getElement().querySelector('#event-end-time-1'),
+        {
+          dateFormat: 'd/m/y H:i',
+          defaultDate: this._data.finishDate,
+          onChange: this._datepickerFinishChangeHandler,
+          minDate: this._data.startDate,
+        },
+      );
+    }
+  }
+
+  _datepickerFinishChangeHandler([userDate]) {
+    this.updateData({
+      finishDate: userDate,
+    });
   }
 
   _formSubmitHandler() {
@@ -250,6 +307,8 @@ export default class TripEdit extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDatepickerStart();
+    this._setDatepickerFinish();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setFormCancelClickHandler(this._callback.formCancel);
     this.setFormDeleteClickHandler(this._callback.deleteClick);
