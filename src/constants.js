@@ -43,15 +43,6 @@ export const PointsIcon = {
   [PointsType.Restaurant]: 'img/icons/restaurant.png',
 };
 
-export const Cities = {
-  AMSTERDAM:'Amsterdam',
-  ROTTERDAM:'Rotterdam',
-  BERLIN:'Berlin',
-  VIENNA:'Vienna',
-  PRAGUE:'Prague',
-  PARIS:'Paris',
-};
-
 export const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
@@ -178,3 +169,156 @@ export const OFFERS_OPTION = [
     ],
   },
 ];
+
+export const Cities = {
+  AMSTERDAM:'Amsterdam',
+  WASHINGTON:'Washington',
+  BERLIN:'Berlin',
+  VIENNA:'Vienna',
+  PRAGUE:'Prague',
+  PARIS:'Paris',
+};
+
+export const DESTINATIONS = [
+  {
+    'name': 'Amsterdam',
+    'description': 'Amsterdam. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
+    'pictures': [
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Amsterdam zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Amsterdam street market',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Amsterdam parliament building',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Amsterdam embankment',
+      },
+    ],
+  },
+
+  {
+    'name': 'Washington',
+    'description': 'Washington, cras aliquet varius magna, non porta ligula feugiat eget Fusce tristique felis at fermentum pharetra.Aliquam id orci ut lectus varius viverra.Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
+    'pictures': [
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Washington zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Washington street market',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Washington parliament building',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Washington embankment',
+      },
+    ],
+  },
+  {
+    'name': 'Berlin',
+    'description': 'Berlin, cras aliquet varius magna, non porta ligula feugiat eget Fusce tristique felis at fermentum pharetra.Aliquam id orci ut lectus varius viverra.Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
+    'pictures': [
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Berlin zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Berlin street market',
+      },
+    ],
+  },
+
+  {
+    'name': 'Vienna',
+    'description': 'Vienna, cras aliquet varius magna, non porta ligula feugiat eget Fusce tristique felis at fermentum pharetra.Aliquam id orci ut lectus varius viverra.',
+    'pictures': [
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Vienna zoo',
+      },
+    ],
+  },
+  {
+    'name': 'Prague',
+    'description': 'Prague, with a beautiful old town.',
+    'pictures': [
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Prague zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Prague zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Prague street market',
+      },
+    ],
+  },
+  {
+    'name': 'Paris',
+    'description': 'Paris. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.Sed sed nisi sed augue convallis suscipit in sed felis.Aliquam erat volutpat.',
+    'pictures': [
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Paris zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Paris zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Paris street market',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Paris zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Paris zoo',
+      },
+    ],
+  },
+  {
+    'name': 'Geneva',
+    'description': 'Geneva. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.Sed sed nisi sed augue convallis suscipit in sed felis.Aliquam erat volutpat.',
+    'pictures': [
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva street market',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva zoo',
+      },
+      {
+        'src': `http://picsum.photos/248/152?r=${Math.random()}`,
+        'description': 'Geneva zoo',
+      },
+    ],
+  },
+];
+

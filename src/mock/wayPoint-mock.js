@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import {generateDestination} from '../mock/destination-mock.js';
 import {generateOffers} from '../mock/offers-mock.js';
 import {getRandomNumber,getArrayRandElement} from '../utils/common.js';
 import {
@@ -10,6 +9,15 @@ import {
   Cities,
   PointsIcon
 } from '../constants.js';
+
+export const BLANK_EVENT = {
+  eventType: PointsType.Taxi,
+  destination: '',
+  startDate: dayjs(),
+  endDate: dayjs(),
+  price: '',
+  offers: [],
+};
 
 const generateDate = (
   fromDate,
@@ -30,7 +38,6 @@ const generateWaypoint = (id) => {
     icon: PointsIcon[waypointType],
     city,
     offers: generateOffers(waypointType),
-    destination: generateDestination(city),
     startDate,
     finishDate,
     price: getRandomNumber(10, 200),
