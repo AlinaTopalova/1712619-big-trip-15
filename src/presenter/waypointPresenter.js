@@ -2,7 +2,7 @@ import WaypointView from '../view/waypoint.js';
 import TripEditView from '../view/editForm.js';
 
 import { render, replace, remove } from '../utils/render.js';
-import { RenderPosition } from '../constants.js';
+import { RenderPosition, UserAction, UpdateType } from '../constants.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -23,8 +23,8 @@ export default class Waypoint {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._handleFormCancelClick = this._handleFormCancelClick.bind(this);
-    this._handleEditFormDelete = this._handleEditFormDelete.bind(this);
+    this._handleFormCloseClick = this._handleFormCloseClick.bind(this);
+    this._handleFormDeleteClick = this._handleFormDeleteClick.bind(this);
   }
 
   init(waypoint) {
@@ -38,8 +38,8 @@ export default class Waypoint {
     this._waypointView.setEditClickHandler(this._handleEditClick);
     this._waypointView.setFavoriteClickHandler(this._handleFavoriteClick);
     this._waypointEditView.setFormSubmitHandler(this._handleFormSubmit);
-    this._waypointEditView.setFormCancelClickHandler(this._handleFormCancelClick);
-    this._waypointEditView.setFormDeleteClickHandler(this._handleEditFormDelete);
+    this._waypointEditView.setFormCloseClickHandler(this._handleFormCloseClick);
+    this._waypointEditView.setFormDeleteClickHandler(this._handleFormDeleteClick);
 
     if (prevWaypointView === null || prevWaypointEditView === null) {
       render(
@@ -98,17 +98,23 @@ export default class Waypoint {
     this._replaceWaypointToEdit();
   }
 
-  _handleFormCancelClick() {
+  _handleFormCloseClick() {
     this._waypointEditView.reset(this._waypoint);
     this._replaceEditToWaypoint();
   }
 
-  _handleEditFormDelete() {
-    this._replaceEditToWaypoint(); // не реализовала удаление точки маршрута
+  _handleFormDeleteClick(waypoint) {
+    this._changeData(
+      UserAction.DELETE_WAYPOINT,
+      UpdateType.MINOR,
+      waypoint,
+    );
   }
 
   _handleFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_WAYPOINT,
+      UpdateType.PATCH,
       Object.assign(
         {},
         this._waypoint,
@@ -119,8 +125,12 @@ export default class Waypoint {
     );
   }
 
-  _handleFormSubmit(waypoint) {
-    this._changeData(waypoint);
+  _handleFormSubmit(update) {
+    this._changeData(
+      UserAction.UPDATE_WAYPOINT,
+      UpdateType.MINOR,
+      update,
+    );
     this._replaceEditToWaypoint();
   }
 }

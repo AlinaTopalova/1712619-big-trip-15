@@ -2,7 +2,13 @@ export const START_DATE_GAP = 159200000;
 export const FINISH_DATE_GAP_FROM = 3600000;
 export const FINISH_DATE_GAP_TO = 14400000;
 
-export const FiltersName = {
+export const FLATPICKER_SETUP = {
+  dateFormat: 'd/m/y H:i',
+  ['time_24hr']: true,
+  enableTime: true,
+};
+
+export const FiltersType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PAST: 'past',
@@ -17,6 +23,18 @@ export const SortType = {
 export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
+};
+
+export const UserAction = {
+  UPDATE_WAYPOINT: 'UPDATE_WAYPOINT',
+  ADD_WAYPOINT: 'ADD_WAYPOINT',
+  DELETE_WAYPOINT: 'DELETE_WAYPOINT',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
 };
 
 export const PointsType = {
@@ -322,3 +340,27 @@ export const DESTINATIONS = [
   },
 ];
 
+export const BLANK_WAYPOINT = {
+  city: 'Paris',
+  price: '',
+  icon: PointsIcon['taxi'],
+  startDate: new Date(),
+  finishDate: new Date(),
+  type: 'taxi',
+  offers: [
+    {
+      'title': 'Upgrade to a business class',
+      'price': 50,
+    },
+    {
+      'title': 'Upgrade to a business class',
+      'price': 50,
+    },
+  ],
+  destination: {
+    description: '',
+    name: '',
+    pictures: [],
+  },
+  isFavorite: false,
+};

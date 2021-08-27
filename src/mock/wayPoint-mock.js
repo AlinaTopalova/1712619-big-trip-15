@@ -10,15 +10,6 @@ import {
   PointsIcon
 } from '../constants.js';
 
-export const BLANK_EVENT = {
-  eventType: PointsType.Taxi,
-  destination: '',
-  startDate: dayjs(),
-  endDate: dayjs(),
-  price: '',
-  offers: [],
-};
-
 const generateDate = (
   fromDate,
   gap = getRandomNumber(-START_DATE_GAP, START_DATE_GAP),
