@@ -1,5 +1,5 @@
 import AbstractView from './abstract';
-import { formatedDate, DATE_FORMAT } from '../utils/date.js';
+import { formattedDate, DATE_FORMAT } from '../utils/date.js';
 
 const createRouteTripTemplate = (waypoints) => {
   const startDate = waypoints[0].startDate;
@@ -16,8 +16,8 @@ const createRouteTripTemplate = (waypoints) => {
   </h1>
   <p class="trip-info__dates">
   ${(startDate.getMonth() === finishDate.getMonth()) ?
-    `${formatedDate(startDate, DATE_FORMAT.DAYMONTH)}&nbsp;&mdash;&nbsp;${formatedDate(finishDate, DATE_FORMAT.DAY)}`:
-    `${formatedDate(startDate, DATE_FORMAT.DAYMONTH)}&nbsp;&mdash;&nbsp;${formatedDate(finishDate, DATE_FORMAT.DAYMONTH)}`}
+    `${formattedDate(startDate, DATE_FORMAT.DAYMONTH)}&nbsp;&mdash;&nbsp;${formattedDate(finishDate, DATE_FORMAT.DAY)}`:
+    `${formattedDate(startDate, DATE_FORMAT.DAYMONTH)}&nbsp;&mdash;&nbsp;${formattedDate(finishDate, DATE_FORMAT.DAYMONTH)}`}
   </p>
   </div>`;
 };

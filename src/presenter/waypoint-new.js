@@ -37,6 +37,7 @@ export default class WaypointNew {
     remove(this._waypointEditView);
     this._waypointEditView = null;
     document.removeEventListener('keydown', this._escKeyDownHandler);
+    document.querySelector('.trip-main__event-add-btn').removeAttribute('disabled', 'disabled');
   }
 
   _handleFormSubmit(waypoint) {

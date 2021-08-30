@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import {generateOffers} from '../mock/offers-mock.js';
-import {getRandomNumber,getArrayRandElement} from '../utils/common.js';
+import {getRandomNumber,getArrayRandElement, getArrayRandLength} from '../utils/common.js';
 import {
+  OFFERS_OPTION,
   START_DATE_GAP,
   FINISH_DATE_GAP_FROM,
   FINISH_DATE_GAP_TO,
@@ -15,7 +15,12 @@ const generateDate = (
   gap = getRandomNumber(-START_DATE_GAP, START_DATE_GAP),
 ) => dayjs(fromDate).add(gap, 'ms').toDate();
 
-const generateWaypoint = (id) => {
+const generateOffers = (pointType) => {
+  const { offers } = OFFERS_OPTION.find((option) => option.type === pointType);
+  return getArrayRandLength(offers);
+};
+
+export const generateWaypoint = (id, offersOption) => {
   const startDate = generateDate();
   const finishDate = generateDate(
     startDate,
@@ -28,17 +33,10 @@ const generateWaypoint = (id) => {
     type: waypointType,
     icon: PointsIcon[waypointType],
     city,
-    offers: generateOffers(waypointType),
+    offers: generateOffers(waypointType, offersOption),
     startDate,
     finishDate,
     price: getRandomNumber(10, 200),
     isFavorite: Boolean(getRandomNumber(0, 2)),
   };
 };
-
-const generateWaypoints = (pointsAmount) => (
-  Array.from({ length:pointsAmount })
-    .map((_, idx) => generateWaypoint(`${idx}`))
-);
-
-export { generateWaypoints };

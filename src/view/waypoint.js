@@ -1,7 +1,7 @@
 import AbstractView from './abstract';
 import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration';
-import {formatedDate, DATE_FORMAT} from '../utils/date.js';
+import {formattedDate, DATE_FORMAT} from '../utils/date.js';
 
 dayjs.extend(durationPlugin);
 
@@ -21,10 +21,10 @@ const createWaypointTemplate = (waypoint) => {
   const dayjsFinishDate = dayjs(finishDate);
   const dayjsDuration = dayjs.duration(dayjsFinishDate.diff(dayjsStartDate));
 
-  const getFormatedStartDate = () => formatedDate(startDate, DATE_FORMAT.DAYMONTH);
-  const getFormatedStartTime = () => formatedDate(startDate, DATE_FORMAT.TIME);
-  const getFormatedFinishTime = () => formatedDate(finishDate, DATE_FORMAT.TIME);
-  const getFormatedDuration = () => {
+  const getFormattedStartDate = () => formattedDate(startDate, DATE_FORMAT.DAYMONTH);
+  const getFormattedStartTime = () => formattedDate(startDate, DATE_FORMAT.TIME);
+  const getFormattedFinishTime = () => formattedDate(finishDate, DATE_FORMAT.TIME);
+  const getFormattedDuration = () => {
     let formatTemplate = 'mm[M]';
     if (dayjsDuration.hours()) {
       formatTemplate = 'HH[H] mm[M]';
@@ -47,18 +47,18 @@ const createWaypointTemplate = (waypoint) => {
 
   return `<li class="trip-events__item">
   <div class="event">
-      <time class="event__date" datetime="2019-03-18">${getFormatedStartDate()}</time>
+      <time class="event__date" datetime="2019-03-18">${getFormattedStartDate()}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src=${icon} alt="Event type icon">
       </div>
       <h3 class="event__title">${type} ${city}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">${getFormatedStartTime()}</time>
+          <time class="event__start-time" datetime="2019-03-18T10:30">${getFormattedStartTime()}</time>
           &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">${getFormatedFinishTime()}</time>
+          <time class="event__end-time" datetime="2019-03-18T11:00">${getFormattedFinishTime()}</time>
         </p>
-        <p class="event__duration">${getFormatedDuration()}</p>
+        <p class="event__duration">${getFormattedDuration()}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${price}</span>

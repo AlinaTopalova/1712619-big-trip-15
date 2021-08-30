@@ -11,9 +11,10 @@ import { SortType, UpdateType, UserAction, FiltersType } from '../constants.js';
 import { filter } from '../utils/filter.js';
 
 export default class Trip {
-  constructor(waypointsModel, filterModel) {
+  constructor(waypointsModel, filterModel, offersModel) {
     this._waypointsModel = waypointsModel;
     this._filterModel = filterModel;
+    this._offersModel = offersModel;
     this._tripEventsContainer = document.querySelector('.trip-events');
     this._waypointPresenters = new Map();
     this._filterType = FiltersType.EVERYTHING;
@@ -28,15 +29,23 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._waypointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-
-    this._waypointNewPresenter = new WaypointNewPresenter(this._eventsListView, this._handleViewAction);  // не уверена в this._eventsListView
+    this._waypointNewPresenter = new WaypointNewPresenter(this._eventsListView, this._handleViewAction);
   }
 
   init() {
     render(this._tripEventsContainer, this._eventsListView, RenderPosition.BEFOREEND);
+    this._waypointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+    this._offersModel.addObserver(this._handleModelEvent);
     this._renderTrip();
+  }
+
+  destroy() {
+    this._clearTrip({resetSortType: true});
+    remove(this._eventsListView);
+    this._waypointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+    this._offersModel.removeObserver(this._handleModelEvent);
   }
 
   createWaypoint() {
