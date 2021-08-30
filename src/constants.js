@@ -2,10 +2,27 @@ export const START_DATE_GAP = 159200000;
 export const FINISH_DATE_GAP_FROM = 3600000;
 export const FINISH_DATE_GAP_TO = 14400000;
 
+export const BACKGROUND_COLORS = {
+  'taxi': 'rgba(25, 25, 112, 0.5)',
+  'bus': 'rgba(0, 0, 139, 0.5)',
+  'train': 'rgba(123, 104, 238, 0.5)',
+  'ship': 'rgba(30, 144, 255, 0.5)',
+  'drive': 'rgba(0, 191, 255, 0.5)',
+  'flight': 'rgba(72, 209, 204, 0.5)',
+  'check-in': 'rgba(0, 0, 255, 0.5)',
+  'restaurant': 'rgba(70, 130, 180, 0.5)',
+  'sightseeing': 'rgba(135, 206, 235, 0.5)',
+};
+
 export const FLATPICKER_SETUP = {
   dateFormat: 'd/m/y H:i',
   ['time_24hr']: true,
   enableTime: true,
+};
+
+export const MENU_ITEM = {
+  TABLE: 'Table',
+  STATS: 'Stats',
 };
 
 export const FiltersType = {

@@ -58,4 +58,16 @@ export default class Filter {
       },
     ];
   }
+
+  disableFilters() {
+    const filters = document.querySelectorAll('.trip-filters__filter-input');
+
+    filters.forEach((filter) => filter.setAttribute('disabled', true));
+  }
+
+  enableFilters() {
+    const filters = document.querySelectorAll('.trip-filters__filter-input');
+
+    filters.forEach((filter) => filter.removeAttribute('disabled'));
+  }
 }

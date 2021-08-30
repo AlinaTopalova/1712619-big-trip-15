@@ -1,6 +1,6 @@
 import SmartView from './smart.js';
 import dayjs from 'dayjs';
-import {OFFERS_OPTION, PointsType, Cities, DESTINATIONS, PointsIcon} from '../constants.js';
+import { PointsType, Cities, DESTINATIONS, PointsIcon, OFFERS_OPTION } from '../constants.js';
 import { BLANK_WAYPOINT, FLATPICKER_SETUP } from '../constants.js';
 import flatpickr from 'flatpickr';
 
@@ -21,6 +21,9 @@ const createTripEditTemplate = (data, isEdit) => {
 
   const renderDestination = (cityName) => {
     const destinationCity = DESTINATIONS.find((destinationElement) => destinationElement.name === cityName);
+    if (!destinationCity) {
+      return '';
+    }
     return `
     <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -53,6 +56,8 @@ const createTripEditTemplate = (data, isEdit) => {
             type="checkbox"
             name="event-offer-${idx}"
             ${isChecked ? 'checked' : ''}
+            data-title = "${offer.title}"
+            data-price = "${offer.price}"
           >
           <label class="event__offer-label" for="event-offer-${idx}">
             <span class="event__offer-title">${offer.title}</span>
@@ -140,7 +145,7 @@ const createTripEditTemplate = (data, isEdit) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${price}>
+        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${price} pattern="[0-9]{10}">
       </div>
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
       <button class="event__reset-btn" type="reset">${ isEdit ? 'Delete' : 'Cancel' }</button>
@@ -169,6 +174,7 @@ export default class TripEdit extends SmartView {
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
     this._priceInputHandler  = this._priceInputHandler.bind(this);
+    this._offersChangeHandler = this._offersChangeHandler.bind(this);
     this._datepickerStartChangeHandler = this._datepickerStartChangeHandler.bind(this);
     this._datepickerFinishChangeHandler = this._datepickerFinishChangeHandler.bind(this);
     this._setInnerHandlers();
@@ -224,6 +230,7 @@ export default class TripEdit extends SmartView {
           {
             defaultDate: this._data.startDate,
             onChange: this._datepickerStartChangeHandler,
+            maxDate: this._data.finishDate,
           },
         ),
       );
@@ -319,6 +326,16 @@ export default class TripEdit extends SmartView {
       type: evt.target.value,
       [evt.target.value]: evt.target.checked,
       icon: PointsIcon[evt.target.value],
+      offers: [],
+    });
+  }
+
+  _offersChangeHandler(evt) {
+    const { price, title } = evt.target.dataset;
+    this.updateData({
+      offers: evt.target.checked
+        ? [...this._data.offers, {title, price: Number(price)}]
+        : [...this._data.offers.filter((offer) => offer.title !== title)],
     });
   }
 
@@ -333,6 +350,11 @@ export default class TripEdit extends SmartView {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._eventTypeChangeHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceInputHandler);
     this.getElement().querySelector('.event__field-group--destination').addEventListener('change', this._destinationChangeHandler);
+    const blockOffers = this.getElement().querySelector('.event__section--offers');
+    if (!blockOffers) {
+      return;
+    }
+    blockOffers.addEventListener('change', this._offersChangeHandler);
   }
 
   restoreHandlers() {
