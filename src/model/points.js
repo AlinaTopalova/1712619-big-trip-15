@@ -6,8 +6,9 @@ export default class Waypoints extends AbstractObserver {
     this._waypoints = [];
   }
 
-  setWaypoints(waypoints) {
+  setWaypoints(updateType, waypoints) {
     this._waypoints = waypoints.slice();
+    this._notify(updateType);
   }
 
   getWaypoints() {
@@ -51,5 +52,45 @@ export default class Waypoints extends AbstractObserver {
     ];
 
     this._notify(updateType);
+  }
+
+  static adaptToClient(waypoint) {
+    const adaptWaypoint = Object.assign(
+      {},
+      waypoint,
+      {
+        startDate: waypoint['date_from'] !== null ? new Date(waypoint['date_from']) : waypoint['date_from'],
+        finishDate: waypoint['date_to'] !== null ? new Date(waypoint['date_to']) : waypoint['date_to'],
+        isFavorite: waypoint['is_favorite'],
+        price: waypoint['base_price'],
+      },
+    );
+
+    delete adaptWaypoint['date_from'];
+    delete adaptWaypoint['date_to'];
+    delete adaptWaypoint['is_favorite'];
+    delete adaptWaypoint['base_price'];
+
+    return adaptWaypoint;
+  }
+
+  static adaptToServer(waypoint) {
+    const adaptWaypoint = Object.assign(
+      {},
+      waypoint,
+      {
+        'date_from':  waypoint.startDate instanceof Date ? waypoint.startDate.toISOString() : null,
+        'date_to': waypoint.finishDate instanceof Date ? waypoint.finishDate.toISOString() : null,
+        'is_favorite': waypoint.isFavorite,
+        'base_price': waypoint.price,
+      },
+    );
+
+    delete adaptWaypoint.startDate;
+    delete adaptWaypoint.finishDate;
+    delete adaptWaypoint.isFavorite;
+    delete adaptWaypoint.price;
+
+    return adaptWaypoint;
   }
 }

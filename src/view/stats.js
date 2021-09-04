@@ -34,7 +34,7 @@ const renderMoneyChart = (ctx, waypoints) => {
       plugins: {
         datalabels: {
           font: {
-            size: 15,
+            size: 14,
           },
           color: '#000000',
           anchor: 'end',
@@ -107,7 +107,7 @@ const renderTypeChart = (ctx, waypoints) => {
       plugins: {
         datalabels: {
           font: {
-            size: 15,
+            size: 14,
           },
           color: '#000000',
           anchor: 'end',
@@ -173,14 +173,14 @@ const renderTimeChart = (ctx, waypoints) => {
         backgroundColor,
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
-        minBarLength: 50,
+        minBarLength: 150,
       }],
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 15,
+            size: 14,
           },
           color: '#000000',
           anchor: 'end',

@@ -3,17 +3,17 @@ import { render, replace, remove } from '../utils/render.js';
 import { RenderPosition, UpdateType, FiltersType } from '../constants.js';
 
 export default class Filter {
-  constructor(filterContainer, filterModel, pointsModel) {
+  constructor(filterContainer, filterModel, WaypointsModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
-    this._pointsModel = pointsModel;
+    this._waypointsModel = WaypointsModel;
 
     this._filterComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
-    this._pointsModel.addObserver(this._handleModelEvent);
+    this._waypointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
