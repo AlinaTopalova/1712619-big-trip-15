@@ -67,7 +67,6 @@ Promise.all([
   api.getWaypoints(),
 ]).then((values) => {
   offersModel.setOffers(values[0]);
-  console.log('values[2]', values[2]);
   destinationsModel.setDestinations(values[1]);
   waypointsModel.setWaypoints(UpdateType.INIT, values[2]);
   render(siteNavigationEl, siteMenuView, RenderPosition.BEFOREEND);
