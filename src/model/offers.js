@@ -3,11 +3,11 @@ import AbstractObserver from '../utils/abstract-observer.js';
 export default class Offers extends AbstractObserver {
   constructor() {
     super();
-    this.Offers = [];
+    this._offers = null;
   }
 
   setOffers(offers) {
-    this._offers = offers.slice();
+    this._offers = offers;
   }
 
   getOffers() {

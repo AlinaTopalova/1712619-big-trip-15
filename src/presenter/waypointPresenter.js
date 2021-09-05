@@ -9,12 +9,20 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
 export default class Waypoint {
   constructor(waypointListContainer, changeData, changeMode) {
     this._waypointListContainer = waypointListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._mode = Mode.DEFAULT;
+    this._offersModel = null;
+    this._destinationsModel = null;
 
     this._waypointView = null;
     this._waypointEditView = null;
@@ -27,14 +35,16 @@ export default class Waypoint {
     this._handleFormDeleteClick = this._handleFormDeleteClick.bind(this);
   }
 
-  init(waypoint) {
+  init(waypoint, offersModel, destinationsModel) {
     this._waypoint = waypoint;
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
     const prevWaypointView = this._waypointView;
     const prevWaypointEditView = this._waypointEditView;
 
     this._waypointView = new WaypointView(waypoint);
-    this._waypointEditView = new TripEditView(waypoint);
+    this._waypointEditView = new TripEditView(waypoint, this._getOffers(), this._getDestinations());
     this._waypointView.setEditClickHandler(this._handleEditClick);
     this._waypointView.setFavoriteClickHandler(this._handleFavoriteClick);
     this._waypointEditView.setFormSubmitHandler(this._handleFormSubmit);
@@ -55,11 +65,20 @@ export default class Waypoint {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._waypointEditView, prevWaypointEditView);
+      replace(this._waypointView, prevWaypointEditView);
+      this._mode = Mode.DEFAULT;
     }
 
     remove(prevWaypointView);
     remove(prevWaypointEditView);
+  }
+
+  _getOffers() {
+    return this._offersModel.getOffers();
+  }
+
+  _getDestinations() {
+    return this._destinationsModel.getDestinations();
   }
 
   destroy() {
@@ -70,6 +89,35 @@ export default class Waypoint {
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceEditToWaypoint();
+    }
+  }
+
+  setViewState(state) {
+    if (this._mode === Mode.DEFAULT) {
+      return;
+    }
+
+    const resetFormState = () => {
+      this._waypointEditView.updateData({
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+    switch (state) {
+      case State.SAVING:
+        this._waypointEditView.updateData({
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this._waypointEditView.updateData({
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this._waypointView.shake(resetFormState);
+        this._waypointEditView.shake(resetFormState);
+        break;
     }
   }
 
@@ -107,14 +155,17 @@ export default class Waypoint {
     this._changeData(
       UserAction.DELETE_WAYPOINT,
       UpdateType.MINOR,
-      waypoint,
+      Object.assign(
+        {},
+        waypoint,
+      ),
     );
   }
 
   _handleFavoriteClick() {
     this._changeData(
       UserAction.UPDATE_WAYPOINT,
-      UpdateType.PATCH,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._waypoint,
@@ -129,8 +180,10 @@ export default class Waypoint {
     this._changeData(
       UserAction.UPDATE_WAYPOINT,
       UpdateType.MINOR,
-      update,
+      Object.assign(
+        {},
+        update,
+      ),
     );
-    this._replaceEditToWaypoint();
   }
 }

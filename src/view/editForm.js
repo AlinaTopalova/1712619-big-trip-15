@@ -1,26 +1,28 @@
 import SmartView from './smart.js';
 import dayjs from 'dayjs';
-import { PointsType, Cities, DESTINATIONS, PointsIcon, OFFERS_OPTION } from '../constants.js';
+import { PointsType} from '../constants.js';
 import { BLANK_WAYPOINT, FLATPICKER_SETUP } from '../constants.js';
+
 import flatpickr from 'flatpickr';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-
-const createTripEditTemplate = (data, isEdit) => {
+const createTripEditTemplate = (data, isEdit, tripOffersData, destinationsData) => {
   const {
     type,
-    city,
+    destination,
     price,
     startDate,
     finishDate,
     offers,
+    isSaving,
+    //isDeleting
   } = data;
 
   const getFormatedFullDate = (date) => dayjs(date).format('DD[/]MM[/]YY HH[:]mm');
 
   const renderDestination = (cityName) => {
-    const destinationCity = DESTINATIONS.find((destinationElement) => destinationElement.name === cityName);
+    const destinationCity = destinationsData.find((destinationsElement) => destinationsElement.name === cityName);
     if (!destinationCity) {
       return '';
     }
@@ -39,7 +41,7 @@ const createTripEditTemplate = (data, isEdit) => {
   };
 
   const renderOffers = (typeOffer) => {
-    const offerOptions = OFFERS_OPTION.find((offerOption) => offerOption.type === typeOffer);
+    const offerOptions = tripOffersData.find((offerOption) => offerOption.type === typeOffer);
 
     if (offerOptions.offers.length === 0) {
       return '';
@@ -78,14 +80,14 @@ const createTripEditTemplate = (data, isEdit) => {
   };
 
   const getCitiesInputs = (cityValue) => {
-    const cityInput = Object.keys(Cities).map((cityName) => `<option value=${Cities[cityName]}
-    ${(cityValue === Cities[cityName]) ? 'selected' : ''}>${Cities[cityName]}</option>`)
+    const cityInput = destinationsData.map((destinationElement) => `<option value=${destinationElement.name}
+    ${(cityValue === destinationElement.name) ? 'selected' : ''}>${destinationElement.name}</option>`)
       .join('');
     return `<div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
       ${type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1" onkeyup="this.value=this.value=''">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" onkeyup="this.value=this.value=''">
     <datalist id="destination-list-1">
     ${cityInput};
     </datalist>
@@ -132,7 +134,7 @@ const createTripEditTemplate = (data, isEdit) => {
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getWaypointTypesTemplate(type)}
-      ${getCitiesInputs(city)}
+      ${getCitiesInputs(destination.name)}
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
         <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatedFullDate(startDate)}">
@@ -147,7 +149,7 @@ const createTripEditTemplate = (data, isEdit) => {
         </label>
         <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${price} pattern="[0-9]{10}">
       </div>
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+      <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving ? 'Saving...' : 'Save'}</button>
       <button class="event__reset-btn" type="reset">${ isEdit ? 'Delete' : 'Cancel' }</button>
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
@@ -155,19 +157,21 @@ const createTripEditTemplate = (data, isEdit) => {
     </header>
     <section class="event__details">
       ${renderOffers(type)}
-      ${renderDestination(city)}
+      ${renderDestination(destination.name)}
     </section>
    </form>
    </li>`;
 };
 
 export default class TripEdit extends SmartView {
-  constructor(waypoint = BLANK_WAYPOINT, isEdit = true) {
+  constructor(waypoint = BLANK_WAYPOINT, offersData, destinationsData, isEdit = true) {
     super();
     this._data = TripEdit.parsePointToData(waypoint);
     this._datepickerStart = null;
     this._datepickerFinish = null;
     this._isEdit = isEdit;
+    this._offersData = offersData;
+    this._destinationsData = destinationsData;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._deleteClickHandler = this._deleteClickHandler.bind(this);
@@ -201,18 +205,22 @@ export default class TripEdit extends SmartView {
   }
 
   getTemplate() {
-    return createTripEditTemplate(this._data, this._isEdit);
+    return createTripEditTemplate(this._data, this._isEdit, this._offersData, this._destinationsData);
   }
 
   static parsePointToData(waypoint) {
     return Object.assign(
       {},
       waypoint,
+      {
+        isSaving: false,
+      },
     );
   }
 
   static parseDataToPoint(data) {
     data = Object.assign({}, data);
+    delete data.isSaving;
     return data;
   }
 
@@ -284,7 +292,7 @@ export default class TripEdit extends SmartView {
     evt.preventDefault();
     if (!isNaN(evt.target.value) && evt.target.value >= 0) {
       this.updateData({
-        price: evt.target.value,
+        price: Number(evt.target.value),
       }, true);
       return;
     }
@@ -325,7 +333,7 @@ export default class TripEdit extends SmartView {
     this.updateData({
       type: evt.target.value,
       [evt.target.value]: evt.target.checked,
-      icon: PointsIcon[evt.target.value],
+      //icon: PointsIcon[evt.target.value],
       offers: [],
     });
   }
@@ -340,8 +348,13 @@ export default class TripEdit extends SmartView {
   }
 
   _destinationChangeHandler(evt) {
+    const newCity = this._destinationsData.find((destinationsElement) => destinationsElement.name === evt.target.value);
     this.updateData({
-      city: evt.target.value,
+      destination: {
+        name: newCity.name,
+        description: newCity.description,
+        pictures: newCity.pictures,
+      },
       [evt.target.value]: evt.target.checked,
     });
   }
