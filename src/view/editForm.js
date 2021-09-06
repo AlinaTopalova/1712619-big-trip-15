@@ -15,11 +15,73 @@ const createTripEditTemplate = (data, isEdit, tripOffersData, destinationsData) 
     startDate,
     finishDate,
     offers,
+    isDisabled,
     isSaving,
-    //isDeleting
+    isDeleting,
   } = data;
 
   const getFormatedFullDate = (date) => dayjs(date).format('DD[/]MM[/]YY HH[:]mm');
+
+  const getStatusOfCancelButton = () => {
+    switch (true) {
+      case isDeleting:
+        return 'Deleting...';
+      case isEdit:
+        return 'Delete';
+      default:
+        return 'Cancel';
+    }
+  };
+
+  const getWaypointTypes = (tripType) => (
+    Object.keys(PointsType).map((pointType, idx)=> `
+      <div class="event__type-item">
+        <input
+          id="event-type-${PointsType[pointType]}-${idx}"
+          class="event__type-input  visually-hidden"
+          type="radio" name="event-type"
+          value=${PointsType[pointType]}
+          ${(tripType === PointsType[pointType]) ? 'checked' : ''}
+
+        >
+        <label
+          class="event__type-label  event__type-label--${PointsType[pointType]}"
+          for="event-type-${PointsType[pointType]}-${idx}"
+        >
+          ${pointType}
+        </label>
+      </div>`).join('')
+  );
+
+  const getWaypointTypesTemplate = (tripType) => (
+    `<div class="event__type-wrapper">
+        <label class="event__type  event__type-btn" for="event-type-toggle-1">
+          <span class="visually-hidden">Choose event type</span>
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${tripType}.png" alt="Event type icon">
+        </label>
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? 'disabled' : ''}>
+        <div class="event__type-list">
+          <fieldset class="event__type-group">
+            <legend class="visually-hidden">Event type</legend>
+            ${getWaypointTypes(tripType)}
+          </fieldset>
+        </div>
+      </div>`
+  );
+
+  const getCitiesList = (cityValue) => {
+    const citiesList = destinationsData.map((destinationElement) => `<option value=${destinationElement.name}
+    ${(cityValue === destinationElement.name) ? 'selected' : ''}></option>`).join('');
+    return `<div class="event__field-group  event__field-group--destination">
+    <label class="event__label  event__type-output" for="event-destination-1">
+      ${type}
+    </label>
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" onkeyup="this.value=''" ${isDisabled ? 'disabled' : ''}>
+    <datalist id="destination-list-1">
+    ${citiesList};
+    </datalist>
+  </div>`;
+  };
 
   const renderDestination = (cityName) => {
     const destinationCity = destinationsData.find((destinationsElement) => destinationsElement.name === cityName);
@@ -60,7 +122,7 @@ const createTripEditTemplate = (data, isEdit, tripOffersData, destinationsData) 
             ${isChecked ? 'checked' : ''}
             data-title = "${offer.title}"
             data-price = "${offer.price}"
-          >
+            ${isDisabled ? 'disabled' : ''}>
           <label class="event__offer-label" for="event-offer-${idx}">
             <span class="event__offer-title">${offer.title}</span>
             &plus;&euro;&nbsp;
@@ -79,78 +141,27 @@ const createTripEditTemplate = (data, isEdit, tripOffersData, destinationsData) 
     </section>`;
   };
 
-  const getCitiesInputs = (cityValue) => {
-    const cityInput = destinationsData.map((destinationElement) => `<option value=${destinationElement.name}
-    ${(cityValue === destinationElement.name) ? 'selected' : ''}>${destinationElement.name}</option>`)
-      .join('');
-    return `<div class="event__field-group  event__field-group--destination">
-    <label class="event__label  event__type-output" for="event-destination-1">
-      ${type}
-    </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" onkeyup="this.value=this.value=''">
-    <datalist id="destination-list-1">
-    ${cityInput};
-    </datalist>
-  </div>`;
-  };
-
-  const getWaypointTypes = (tripType) => (
-    Object.keys(PointsType).map((pointType, idx)=> `
-      <div class="event__type-item">
-        <input
-          id="event-type-${PointsType[pointType]}-${idx}"
-          class="event__type-input  visually-hidden"
-          type="radio" name="event-type"
-          value=${PointsType[pointType]}
-          ${(tripType === PointsType[pointType]) ? 'checked' : ''}
-
-        >
-        <label
-          class="event__type-label  event__type-label--${PointsType[pointType]}"
-          for="event-type-${PointsType[pointType]}-${idx}"
-        >
-          ${pointType}
-        </label>
-      </div>`).join('')
-  );
-
-  const getWaypointTypesTemplate = (tripType) => (
-    `<div class="event__type-wrapper">
-        <label class="event__type  event__type-btn" for="event-type-toggle-1">
-          <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/${tripType}.png" alt="Event type icon">
-        </label>
-        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
-        <div class="event__type-list">
-          <fieldset class="event__type-group">
-            <legend class="visually-hidden">Event type</legend>
-            ${getWaypointTypes(tripType)}
-          </fieldset>
-        </div>
-      </div>`
-  );
-
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getWaypointTypesTemplate(type)}
-      ${getCitiesInputs(destination.name)}
+      ${getCitiesList(destination.name)}
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatedFullDate(startDate)}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatedFullDate(startDate)}" ${isDisabled ? 'disabled' : ''}>
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatedFullDate(finishDate)}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatedFullDate(finishDate)}" ${isDisabled ? 'disabled' : ''}>
       </div>
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${price} pattern="[0-9]{10}">
+        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value=${price} pattern="[0-9]{10}" ${isDisabled ? 'disabled' : ''}>
       </div>
-      <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving ? 'Saving...' : 'Save'}</button>
-      <button class="event__reset-btn" type="reset">${ isEdit ? 'Delete' : 'Cancel' }</button>
+      <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+      <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${ getStatusOfCancelButton() }</button>
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
@@ -188,6 +199,10 @@ export default class TripEdit extends SmartView {
 
   removeElement() {
     super.removeElement();
+    this._resetDatePicker();
+  }
+
+  _resetDatePicker() {
     if (this._datepickerStart) {
       this._datepickerStart.destroy();
       this._datepickerStart = null;
@@ -236,9 +251,7 @@ export default class TripEdit extends SmartView {
           {},
           FLATPICKER_SETUP,
           {
-            defaultDate: this._data.startDate,
             onChange: this._datepickerStartChangeHandler,
-            maxDate: this._data.finishDate,
           },
         ),
       );
@@ -263,9 +276,8 @@ export default class TripEdit extends SmartView {
           {},
           FLATPICKER_SETUP,
           {
-            defaultDate: this._data.finishDate,
-            onChange: this._datepickerFinishChangeHandler,
             minDate: this._data.startDate,
+            onChange: this._datepickerFinishChangeHandler,
           },
         ),
       );
@@ -333,7 +345,6 @@ export default class TripEdit extends SmartView {
     this.updateData({
       type: evt.target.value,
       [evt.target.value]: evt.target.checked,
-      //icon: PointsIcon[evt.target.value],
       offers: [],
     });
   }
@@ -355,7 +366,6 @@ export default class TripEdit extends SmartView {
         description: newCity.description,
         pictures: newCity.pictures,
       },
-      [evt.target.value]: evt.target.checked,
     });
   }
 

@@ -2,6 +2,8 @@ import WaypointView from '../view/waypoint.js';
 import TripEditView from '../view/editForm.js';
 
 import { render, replace, remove } from '../utils/render.js';
+import { isOnline } from '../utils/common.js';
+import { toast } from '../utils/toast.js';
 import { RenderPosition, UserAction, UpdateType } from '../constants.js';
 
 const Mode = {
@@ -99,6 +101,7 @@ export default class Waypoint {
 
     const resetFormState = () => {
       this._waypointEditView.updateData({
+        isDisabled: false,
         isSaving: false,
         isDeleting: false,
       });
@@ -107,11 +110,13 @@ export default class Waypoint {
       case State.SAVING:
         this._waypointEditView.updateData({
           isSaving: true,
+          isDisabled: true,
         });
         break;
       case State.DELETING:
         this._waypointEditView.updateData({
           isDeleting: true,
+          isDisabled: true,
         });
         break;
       case State.ABORTING:
@@ -143,6 +148,10 @@ export default class Waypoint {
   }
 
   _handleEditClick() {
+    if (!isOnline()) {
+      toast('You can\'t edit task offline');
+      return;
+    }
     this._replaceWaypointToEdit();
   }
 
@@ -152,6 +161,10 @@ export default class Waypoint {
   }
 
   _handleFormDeleteClick(waypoint) {
+    if (!isOnline()) {
+      toast('You can\'t delete task offline');
+      return;
+    }
     this._changeData(
       UserAction.DELETE_WAYPOINT,
       UpdateType.MINOR,
@@ -163,6 +176,10 @@ export default class Waypoint {
   }
 
   _handleFavoriteClick() {
+    if (!isOnline()) {
+      toast('You can\'t edit point offline');
+      return;
+    }
     this._changeData(
       UserAction.UPDATE_WAYPOINT,
       UpdateType.MINOR,
@@ -177,6 +194,10 @@ export default class Waypoint {
   }
 
   _handleFormSubmit(update) {
+    if (!isOnline()) {
+      toast('You can\'t save point offline');
+      return;
+    }
     this._changeData(
       UserAction.UPDATE_WAYPOINT,
       UpdateType.MINOR,
