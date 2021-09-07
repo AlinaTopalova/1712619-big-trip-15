@@ -60,25 +60,20 @@ addWaypointBtn.addEventListener('click', (evt) => {
   addWaypointBtn.setAttribute('disabled', 'disabled');
 });
 
-const getInitialData = () => {
-  Promise.all([
-    apiWithProvider.getOffers(),
-    apiWithProvider.getDestinations(),
-    apiWithProvider.getWaypoints(),
-  ]).then(([offers, destinations, waypoints]) => {
+api.getInitialData(apiWithProvider)
+  .then(([offers, destinations, waypoints]) => {
     offersModel.setOffers(offers);
     destinationsModel.setDestinations(destinations);
     waypointsModel.setWaypoints(UpdateType.INIT, waypoints);
     render(siteNavigationEl, siteMenuView, RenderPosition.BEFOREEND);
     siteMenuView.setMenuChangeHandler(handleSiteMenuChange);
-  }).catch(() => {
+  })
+  .catch(() => {
     waypointsModel.setWaypoints(UpdateType.INIT, []);
     render(siteNavigationEl, siteMenuView, RenderPosition.BEFOREEND);
     siteMenuView.setMenuChangeHandler(handleSiteMenuChange);
   });
-};
 
-getInitialData();
 tripPresenter.init();
 filterPresenter.init();
 infoPresenter.init();

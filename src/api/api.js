@@ -98,4 +98,12 @@ export default class Api {
   static catchError(err) {
     throw err;
   }
+
+  getInitialData(apiData) {
+    return Promise.all([
+      apiData.getOffers(),
+      apiData.getDestinations(),
+      apiData.getWaypoints(),
+    ]);
+  }
 }
