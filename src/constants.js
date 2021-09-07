@@ -1,6 +1,6 @@
-export const START_DATE_GAP = 159200000;
-export const FINISH_DATE_GAP_FROM = 3600000;
-export const FINISH_DATE_GAP_TO = 14400000;
+export const STORE_PREFIX = 'bigtrip-localstorage';
+export const STORE_VER = 'v15';
+export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 export const BACKGROUND_COLORS = {
   'taxi': 'rgba(25, 25, 112, 0.5)',
@@ -65,18 +65,6 @@ export const PointsType = {
   Checkin:'check-in',
   Sightseeing:'sightseeing',
   Restaurant:'restaurant',
-};
-
-export const PointsIcon = {
-  [PointsType.Taxi]: 'img/icons/taxi.png',
-  [PointsType.Bus]: 'img/icons/bus.png',
-  [PointsType.Train]: 'img/icons/train.png',
-  [PointsType.Ship]: 'img/icons/ship.png',
-  [PointsType.Drive]: 'img/icons/drive.png',
-  [PointsType.Flight]: 'img/icons/flight.png',
-  [PointsType.Checkin]: 'img/icons/check-in.png',
-  [PointsType.Sightseeing]: 'img/icons/sightseeing.png',
-  [PointsType.Restaurant]: 'img/icons/restaurant.png',
 };
 
 export const BLANK_WAYPOINT = {

@@ -51,13 +51,16 @@ export default class WaypointNew {
   setSaving() {
     this._waypointEditView.updateData({
       isSaving: true,
+      isDisabled: true,
     });
   }
 
   setAborting() {
     const resetFormState = () => {
       this._waypointEditView.updateData({
+        isDisabled: false,
         isSaving: false,
+        isDeleting: false,
       });
     };
     this._waypointEditView.shake(resetFormState);
@@ -69,7 +72,6 @@ export default class WaypointNew {
       UpdateType.MAJOR,
       waypoint,
     );
-    //this.destroy();
   }
 
   _handleFormCloseClick() {

@@ -6,6 +6,8 @@ import WaypointPresenter, {State as WaypointPresenterViewState} from './waypoint
 import WaypointNewPresenter from './waypoint-new.js';
 
 import { remove, render } from '../utils/render.js';
+import { isOnline } from '../utils/common.js';
+import { toast } from '../utils/toast.js';
 import { RenderPosition } from '../constants.js';
 import { sortDayUp, sortPriceDown, sortTimeDurationDown } from '../utils/date.js';
 import { SortType, UpdateType, UserAction, FiltersType } from '../constants.js';
@@ -52,6 +54,10 @@ export default class Trip {
   }
 
   createWaypoint() {
+    if (!isOnline()) {
+      toast('You can\'t create new point offline');
+      return;
+    }
     this._currentSortType = SortType.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, FiltersType.EVERYTHING);
     this._waypointNewPresenter.init(this._offersModel, this._destinationsModel);

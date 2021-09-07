@@ -19,14 +19,4 @@ export const shuffleArray = (array) => {
   return result;
 };
 
-export const handlePseudo = (remove)  => {
-  const elements = document.querySelectorAll('.page-body__container');
-
-  if (remove) {
-    elements.forEach((element) => element.classList.add('hide-pseudo'));
-
-    return;
-  }
-
-  elements.forEach((element) => element.classList.remove('hide-pseudo'));
-};
+export const isOnline = () => window.navigator.onLine;
