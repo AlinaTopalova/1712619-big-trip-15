@@ -40,7 +40,7 @@ const handleSiteMenuChange = (menuItem) => {
   switch (menuItem) {
     case MENU_ITEM.TABLE:
       filterPresenter.enableFilters();
-      addWaypointBtn.removeAttribute('disabled', 'disabled');
+      addWaypointBtn.removeAttribute('disabled');
       remove(statView);
       tripPresenter.init();
       break;

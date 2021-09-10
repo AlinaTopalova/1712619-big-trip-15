@@ -1,6 +1,5 @@
 export const STORE_PREFIX = 'bigtrip-localstorage';
 export const STORE_VER = 'v15';
-export const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 export const BACKGROUND_COLORS = {
   'taxi': 'rgba(25, 25, 112, 0.5)',
